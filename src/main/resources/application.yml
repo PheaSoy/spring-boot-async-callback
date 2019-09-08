@@ -1,0 +1,20 @@
+stackoverflow:
+  api:
+    base-url: https://api.stackexchange.com
+    tag: /2.2/users/{user_id}/tags?order=desc&sort=popular&site=stackoverflow
+
+logging:
+  level:
+    org:
+      soyphea: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+spring:
+  profiles:
+    active: 'completablefuture'
+server:
+  port: 9090
