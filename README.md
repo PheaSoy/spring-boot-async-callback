@@ -24,6 +24,7 @@ What are the benefits for doing this?
 
 * **Make the system more reliable and robust**
 * **We can execute the process asynchronously and finally you just need to update the state**.
+
 example: 
 ```java
     public CompletableFuture<StackOverflowTagList> fetchTagsFromStackOverFlow(String userId) throws Exception {
@@ -61,7 +62,7 @@ example:
 * **We can adopt with event-driven more easily and scale**. 
 
 If we have a lot of downstream services, we just 
-need to send all the events we need to them through broker.
+need to send all the events we need to them to perform through broker like RabbitMQ, ApacheKafka.
  
 When the downstream services completed, they just need send back the result.
 Then we just need to update the state. 
@@ -74,4 +75,8 @@ We can find any state and the result include the details like the root cause and
 
 They just need the callback id. It might be useful for reporting and reconciliation or settle.
 
+
+All the result with state are storing in memory by default for my design. 
+
+We can just store it whatever that we want. It might be good for **Redis** memory data store or NoSQL for index searching with well document store.
 ![process-flow](docs/process_flow.png)
