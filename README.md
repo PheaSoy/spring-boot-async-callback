@@ -109,13 +109,13 @@ public interface TaskCallbackStorageWorker<T> {
 
 ```
 
-Basically if you can implement this class and provides your storage. I am just create a class `MemoryCallbackStorageWorker` which implemented this interface.
+Basically you can implement this class and provides your storage. I am just create a class `MemoryCallbackStorageWorker` which implemented this interface.
 So it's using hashmap with memory storage.
 
 ## Async Processing
-* This is my service abstract that annotation with `@Async`. In Spring Boot if you want the method running without blocking you need to put `@Async` on your method level.
+* This is my service abstract that annotation with `@Async`. In Spring Boot if you want the method running asynchronously you need to put `@Async` on your method level.
 
-If you want to learn more how to run method asynchronously method in spring boot [check out here](https://spring.io/guides/gs/async-method/).
+If you want to learn more how to run method asynchronously in spring boot [check out here](https://spring.io/guides/gs/async-method/).
 
 
 ```java
@@ -184,15 +184,19 @@ public class STUserTagFetchingAsync extends AsyncBaseService {
 
     public void execute(String userId, String callBackId) throws Exception {
 
-        taskCallbackStorageWorker.processing(callBackId);
+       (1) taskCallbackStorageWorker.processing(callBackId);
         processBusinessLogic(userId)
                 .thenAcceptAsync(stackOverflowTagList ->
-                    taskCallbackStorageWorker.completed(callBackId, stackOverflowTagList)
+                  (2)  taskCallbackStorageWorker.completed(callBackId, stackOverflowTagList)
                 );
     }
 }
 
 ```
+
+**(1)** Init a callback
+
+**(2)** Update state with status COMPLETED.
 
 * This is my controller which get the request and return callback.
 
@@ -211,10 +215,6 @@ public class STUserTagFetchingAsync extends AsyncBaseService {
             return apiResponse;
         }
     
-        @GetMapping("/api/stackoverflow/{callback_id}/callbacks")
-        BaseResultCallBack get(@PathVariable("callback_id") String callBackId) {
-            return memoryCallbackStorageWorker.findResultFromStorage(callBackId).get();
-        }
 ```
 
 **(1)** Just init a callback that return callback_id and store it storage defined.
@@ -224,6 +224,17 @@ This is just my an example.
 
 You can combine all the async pipeline or send event in this process, finally just need to update the state.
 
+* This is controller that get the result from callback by given callback_id.
 
+```java
+        @GetMapping("/api/stackoverflow/{callback_id}/callbacks")
+        BaseResultCallBack get(@PathVariable("callback_id") String callBackId) {
+            return memoryCallbackStorageWorker.findResultFromStorage(callBackId).get();
+        }
+```
 
-
+## What Next
+* Implement DECLINED status with limit of time
+* Implement number limit of processing callback
+* Implement MongoDB and Redis storage
+* Create Event-driven 
