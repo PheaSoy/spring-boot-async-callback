@@ -1,7 +1,6 @@
 package org.soyphea.worker;
 
-import org.soyphea.Status;
-import org.soyphea.domain.BaseResponse;
+import org.soyphea.domain.BaseCallBackResponse;
 import org.soyphea.domain.BaseResultCallBack;
 
 import java.util.Optional;
@@ -22,10 +21,10 @@ public interface TaskCallbackStorageWorker<T> {
 
     Optional<T> findResultFromStorage(String callBackId);
 
-    default BaseResponse generateCallBackIdWithInitStatus() {
+    default BaseCallBackResponse generateCallBackIdWithInitStatus() {
 
         String callBackId = UUID.randomUUID().toString();
-        BaseResponse apiResponse = new BaseResponse(callBackId);
+        BaseCallBackResponse apiResponse = new BaseCallBackResponse(callBackId);
         initStorage(new BaseResultCallBack(
                 callBackId, Status.INIT.toString(), null
         ));

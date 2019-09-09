@@ -1,0 +1,36 @@
+@startuml
+    title : Sample Callback Design
+    actor "User" as user
+    participant "Service" as service
+    database "Storage" as storage
+     participant "Messaging" as messaging
+    participant "DownStream Service" as downstream
+    
+    user -> service: API Call
+    service -> service: Init callback
+    service -> storage: Callback state INIT
+    user <-- service: Return callback Id
+    service -> storage: Callback state PROCESSING
+    service -> service: Async JOB
+    service -> messaging: Send envent notification
+    messaging -> downstream: Send envent notification
+
+    note right of service 
+    Async processing 
+    or Event-drivent send to downstream service
+    end note
+
+    user -> service: Get the result with Callback ID
+    service -> storage: Get the result with Callback ID
+    service <-- storage: Return Result
+    user <-- service: State is PROCESSING
+    messaging <-- downstream: Send envent feedback
+    service <-- downstream: Send envent feedback
+    service--> service: Update state COMPLTED + Result
+    service -> storage: Callback state COMPLTED
+
+    user -> service: Get the result with Callback ID
+    service -> storage: Get the result with Callback ID
+    service <-- storage: Return Result
+    user <-- service: State is COMPLTED+Result
+@enduml

@@ -1,7 +1,7 @@
 package org.soyphea;
 
 import lombok.extern.slf4j.Slf4j;
-import org.soyphea.domain.BaseResponse;
+import org.soyphea.domain.BaseCallBackResponse;
 import org.soyphea.domain.BaseResultCallBack;
 import org.soyphea.job.STUserTagFetchingService;
 import org.soyphea.worker.MemoryCallbackStorageWorker;
@@ -46,8 +46,8 @@ public class SpringBootAsyncClientApplication{
     }
 
     @GetMapping("/api/stackoverflow/{user_id}/tags")
-    BaseResponse create(@PathVariable("user_id") String userId) throws Exception {
-        BaseResponse apiResponse = memoryCallbackStorageWorker.generateCallBackIdWithInitStatus();
+    BaseCallBackResponse create(@PathVariable("user_id") String userId) throws Exception {
+        BaseCallBackResponse apiResponse = memoryCallbackStorageWorker.generateCallBackIdWithInitStatus();
         log.info("API Response with callback id:{}", apiResponse.getCallBackId());
         stUserTagFetchingService.execute(userId, apiResponse.getCallBackId());
         return apiResponse;

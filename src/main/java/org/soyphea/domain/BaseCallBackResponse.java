@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @Getter
 @Setter
-public class BaseResponse {
+public class BaseCallBackResponse {
 
     @JsonProperty("callback_id")
     private String callBackId;

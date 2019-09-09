@@ -1,10 +1,8 @@
 package org.soyphea.worker;
 
 import lombok.extern.slf4j.Slf4j;
-import org.soyphea.Status;
-import org.soyphea.domain.BaseResponse;
+import org.soyphea.domain.BaseCallBackResponse;
 import org.soyphea.domain.BaseResultCallBack;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,10 +28,10 @@ public class MemoryCallbackStorageWorker implements TaskCallbackStorageWorker {
         updateStatus(callBackId, Status.COMPLETED.toString(), returnResult);
     }
 
-    public BaseResponse generateCallBackIdWithInitStatus() {
+    public BaseCallBackResponse generateCallBackIdWithInitStatus() {
         String callBackId = UUID.randomUUID().toString();
         log.info("Init callback with id:{}", callBackId);
-        BaseResponse apiResponse = new BaseResponse(callBackId);
+        BaseCallBackResponse apiResponse = new BaseCallBackResponse(callBackId);
         initStorage(new BaseResultCallBack(
                 callBackId, Status.INIT.toString(), null
         ));
