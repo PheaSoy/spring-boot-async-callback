@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
-public class STUserTagFetchingAsync extends STUserTagFetchingService {
+public class STUserTagFetchingAsync extends AsyncBaseService {
 
     @Autowired
     private UrlBuilder urlBuilder;

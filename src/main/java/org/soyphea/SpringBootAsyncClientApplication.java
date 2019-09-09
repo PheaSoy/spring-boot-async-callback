@@ -3,7 +3,7 @@ package org.soyphea;
 import lombok.extern.slf4j.Slf4j;
 import org.soyphea.domain.BaseCallBackResponse;
 import org.soyphea.domain.BaseResultCallBack;
-import org.soyphea.job.STUserTagFetchingService;
+import org.soyphea.job.AsyncBaseService;
 import org.soyphea.worker.MemoryCallbackStorageWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -24,21 +24,10 @@ import java.util.concurrent.Executor;
 public class SpringBootAsyncClientApplication{
 
     @Autowired
-    private STUserTagFetchingService stUserTagFetchingService;
+    private AsyncBaseService asyncBaseService;
 
     @Autowired
     private MemoryCallbackStorageWorker memoryCallbackStorageWorker;
-
-    @Bean
-    public Executor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(100);
-        executor.setMaxPoolSize(100);
-        executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("ST-Overflow-");
-        executor.initialize();
-        return executor;
-    }
 
     public static void main(String[] args) {
 
@@ -49,7 +38,7 @@ public class SpringBootAsyncClientApplication{
     BaseCallBackResponse create(@PathVariable("user_id") String userId) throws Exception {
         BaseCallBackResponse apiResponse = memoryCallbackStorageWorker.generateCallBackIdWithInitStatus();
         log.info("API Response with callback id:{}", apiResponse.getCallBackId());
-        stUserTagFetchingService.execute(userId, apiResponse.getCallBackId());
+        asyncBaseService.execute(userId, apiResponse.getCallBackId());
         return apiResponse;
     }
 

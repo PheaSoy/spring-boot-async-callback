@@ -8,17 +8,10 @@ import java.util.UUID;
 
 
 public interface TaskCallbackStorageWorker<T> {
-
-
     void initStorage(BaseResultCallBack baseResultCallBack);
-
     void processing(String callBackId);
-
     void completed(String callBackId, T returnResult);
-
-
     void updateStatus(String callBackId, String status, T baseResultCallBack);
-
     Optional<T> findResultFromStorage(String callBackId);
 
     default BaseCallBackResponse generateCallBackIdWithInitStatus() {
