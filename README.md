@@ -1,7 +1,5 @@
 # Callback and Async Sample Solution Design Version 1.0
 ## Overview
-[![CircleCI](https://circleci.com/gh/helm/monocular.svg?style=svg)](https://circleci.com/gh/helm/monocular)
-
 
 Build the API for scale and reliable might need a lot of things required such as Deployment Process
 that be able to scale, failover, Non-Blocking I/O framework, Messaging, Event-driven architecture etc.
